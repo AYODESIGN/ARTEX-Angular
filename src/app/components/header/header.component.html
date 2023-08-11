@@ -1,0 +1,35 @@
+<section id="header"> 
+    <a href="#"><img src="assets/images\logo.png" class="logo" alt="logo" onclick="window.location.href='index.html';"></a>
+     
+  <div>
+    <ul id="navbar">
+      
+      <li><a class="active" href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li *ngIf="!isLoggedIn()" ><a routerLink="login">Login</a></li>
+      <li *ngIf="isLoggedIn()" ><a class="text-primary">Welcome {{decodedToken.Fname}}</a></li>
+      <li *ngIf="isLoggedIn()" ><a (click)="logout()">Logout</a></li>
+      <li *ngIf="!isLoggedIn()"><a routerLink="signup/user">Register</a></li>
+      <li id="lg-bag"><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+      <li><a href="https://api.whatsapp.com/send?phone=21629586148&text=" class="fa fa-whatsapp" style="font-size:48px;color:green"></a> </li>
+      <li><div id="google_translate_element"></div>
+
+        <script type="text/javascript">
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+        }
+        </script>
+        
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        </li>
+      
+      <a href="#" id="close"> <i class="far fa-times"></i></a>
+    </ul>
+  </div>
+  <div id="mobile">
+    <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+    <i id="bar" class="fas fa-outdent"></i>
+  </div>
+  </section>

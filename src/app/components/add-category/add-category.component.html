@@ -1,0 +1,30 @@
+<section id="form-details">
+    
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    
+
+    <label for="categoryName">Category Name</label>
+    <input type="text" id="categoryName" formControlName="categoryName">
+
+    <label for="categoryName">Width</label>
+    <input type="text" id="width" formControlName="width">
+  
+    <label for="categoryName">Width</label>
+    <input type="text" id="weight" formControlName="weight">
+    
+    <label for="description">Description</label>
+  <textarea id="description" formControlName="description"></textarea>
+
+  <label for="foldType">Fold Type</label>
+  <select class="mb-2" id="foldType" formControlName="foldType">
+    <option value="" disabled>Select a fold type</option>
+    <option value="foldType1">1 fold</option>
+    <option value="foldType2">2 fold</option>
+    <option value="foldType2">3 fold</option>
+    <option value="foldType2">4 fold</option>
+    </select>
+  
+    <button type="submit">Add Category</button>
+  </form>
+  
+</section>

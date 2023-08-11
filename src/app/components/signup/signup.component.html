@@ -1,0 +1,160 @@
+
+
+
+    
+        <div class="container text-center marginTop">
+              <h2 class="m-auto">{{title}}</h2>
+              <p *ngIf="admin">Registration for the adminstration only</p>
+
+        </div>
+       
+
+
+<div class="site-section">
+    <div class="container">
+
+
+        <div class="row justify-content-center">
+            <section id="form-details">
+  
+            <form [formGroup]="signupForm" class="col-md-5">
+                <div class="row">
+                 
+                    <div  class="col-md-12 form-group">
+                        <label for="username">First Name</label>
+                        <input formControlName="firstName" type="text" id="username" class="form-control form-control-lg">
+                    </div>
+                    <div class="m-auto" *ngIf="signupForm.controls['firstName'].invalid && (signupForm.controls['firstName'].touched || signupForm.controls['firstName'].dirty)">
+                      <div *ngIf="signupForm.controls['firstName'].errors.required">
+                        First Name is required.
+                      </div>
+                      <div *ngIf="signupForm.controls['firstName'].errors.minlength">
+                        First Name must have at least 3 characters.
+                      </div>
+                    </div>
+                 
+                    <div class="col-md-12 form-group">
+                      <label for="username">Surename</label>
+                      <input formControlName="lastName" type="text" id="username" class="form-control form-control-lg">
+                  </div>
+                  <div class="m-auto" *ngIf="signupForm.controls['lastName'].invalid && (signupForm.controls['lastName'].touched || signupForm.controls['lastName'].dirty)">
+                      <div *ngIf="signupForm.controls['lastName'].errors.required">
+                        Last Name is required.
+                      </div>
+                      <div *ngIf="signupForm.controls['lastName'].errors.minlength">
+                        Last Name must have at least 3 characters.
+                      </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="email">Email</label>
+                        <input formControlName="email" type="email" id="email" class="form-control form-control-lg">
+                    </div>
+                    <div class="m-auto" *ngIf="signupForm.controls['email'].invalid && (signupForm.controls['email'].touched || signupForm.controls['email'].dirty)">
+                      <div *ngIf="signupForm.controls['email'].errors.required">
+                        Email is required.
+                      </div>
+                      <div *ngIf="signupForm.controls['email'].errors.email">
+                         Invalid Email.
+                      </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="pword">Password</label>
+                        <input formControlName="pwd" type="password" id="pword" class="form-control form-control-lg">
+                    </div>
+                    <div class="m-auto" *ngIf="signupForm.controls['pwd'].invalid && (signupForm.controls['pwd'].touched || signupForm.controls['pwd'].dirty)">
+                      <div *ngIf="signupForm.controls['pwd'].errors.required">
+                        Password is required.
+                      </div>
+                      <div *ngIf="signupForm.controls['pwd'].errors.minlength">
+                         Password must have at least 6 characters.
+                      </div>
+                      <div *ngIf="signupForm.controls['pwd'].errors.maxlength">
+                         Password must have at most 12 characters.
+                      </div>
+                    </div>
+
+                    <div *ngIf="teacher" class="col-md-12 form-group">
+                      <label>Specialty</label>
+                      <input formControlName="specialty" type="text"  class="form-control form-control-lg">
+                  </div>
+                  <div class="m-auto" *ngIf="teacher && signupForm.controls['specialty'].invalid &&
+                   (signupForm.controls['specialty'].touched
+                    || signupForm.controls['specialty'].dirty)">
+                      <div *ngIf="teacher && signupForm.controls['specialty'].errors.required">
+                        Specialty is required.
+                      </div>
+                      <div *ngIf="teacher && signupForm.controls['specialty'].errors.minlength">
+                          Specialty must have at least 3 characters.
+                      </div>
+                    </div>
+                  <div class="col-md-12 form-group">
+                    <label for="address">Address</label>
+                    <input formControlName="address" type="text" id="address" class="form-control form-control-lg">
+                </div>
+                <div class="m-auto" *ngIf="signupForm.controls['address'].invalid && (signupForm.controls['address'].touched || signupForm.controls['address'].dirty)">
+                  <div *ngIf="signupForm.controls['address'].errors.required">
+                    Address is required.
+                  </div>
+                  <div *ngIf="signupForm.controls['address'].errors.minlength">
+                      Address must have at least 5 characters.
+                  </div>
+                </div>
+                <div class="col-md-12 form-group">
+                  <label for="phone">Phone Number</label>
+                  <input formControlName="phone" type="text" id="phone" class="form-control form-control-lg">
+              </div>
+              <div class="m-auto" *ngIf="signupForm.controls['phone'].invalid && (signupForm.controls['phone'].touched || signupForm.controls['phone'].dirty)">
+                  <div *ngIf="signupForm.controls['phone'].errors.required">
+                    Phone is required.
+                  </div>
+                  <div *ngIf="signupForm.controls['phone'].errors.pattern">
+                      Phone must be a number.
+                    </div>
+                  <div *ngIf="signupForm.controls['phone'].errors.minlength">
+                      Phone must have at least 8 digits.
+                  </div>
+                </div>
+                <div *ngIf="parent" class="col-md-12 form-group">
+                  <label for="phone">Child's Phone</label>
+                  <input formControlName="childPhone" type="text" id="phone" class="form-control form-control-lg">
+              </div>
+              <div class="m-auto" *ngIf="parent && signupForm.controls['childPhone'].invalid && (signupForm.controls['childPhone'].touched || signupForm.controls['childPhone'].dirty)">
+                  <div *ngIf="signupForm.controls['childPhone'].errors.required">
+                     Child Phone is required.
+                  </div>
+                  <div *ngIf="parent && signupForm.controls['childPhone'].errors.pattern">
+                      Child Phone must be a number.
+                    </div>
+                  <div *ngIf="parent && signupForm.controls['childPhone'].errors.minlength">
+                     Child Phone must have at least 8 digits.
+                  </div>
+                </div>
+                <span *ngIf="parent && childParentPhoneErorr">{{childParentPhoneErorr}}</span>
+                </div>
+                <!-- pdf input -->
+              
+            
+                  <!-- img input -->
+                <div class="form-group">
+                  <input type="file"  class="form-control" style="visibility: hidden;" #filePicker (change)='onImageSelected($event)'>
+                </div> 
+                <div  class="text-center">
+                  <button class="btn btn-primary" (click)="filePicker.click()">Select Profile Photo</button>
+                </div>
+                <div class="text-center mb-2">
+                  <img [src]="imagePreview" alt="" width="200px">
+                </div>
+                <div class="row text-center">
+                    <div class="col-12">
+                        <input (click)="signup()" [disabled]="signupForm.invalid" type="submit" value="Register" class="btn btn-primary btn-lg px-5">
+                    </div>
+                </div>
+            </form>
+            </section>
+        </div>
+        
+
+      
+    </div>
+</div>
+
