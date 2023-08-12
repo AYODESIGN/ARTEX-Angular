@@ -1,7 +1,7 @@
 <section id="form-details">
-    
-<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-    
+    <h2 class="text-center margin-top">Product Category</h2>
+<form [formGroup]="categoryForm">
+     
 
     <label for="categoryName">Category Name</label>
     <input type="text" id="categoryName" formControlName="categoryName">
@@ -9,22 +9,30 @@
     <label for="categoryName">Width</label>
     <input type="text" id="width" formControlName="width">
   
-    <label for="categoryName">Width</label>
+    <label for="categoryName">Weight</label>
     <input type="text" id="weight" formControlName="weight">
+
+    <label for="categoryName">Length </label>
+    <input type="text" id="length" formControlName="length">
+
+    <label for="categoryName">Composition</label>
+    <input type="text" id="composition" formControlName="composition">
+
+    
     
     <label for="description">Description</label>
   <textarea id="description" formControlName="description"></textarea>
 
-  <label for="foldType">Fold Type</label>
-  <select class="mb-2" id="foldType" formControlName="foldType">
+  <!-- <label for="foldType">Fold Type</label> -->
+  <!-- <select class="mb-2" id="foldType" formControlName="foldType">
     <option value="" disabled>Select a fold type</option>
     <option value="foldType1">1 fold</option>
     <option value="foldType2">2 fold</option>
     <option value="foldType2">3 fold</option>
     <option value="foldType2">4 fold</option>
-    </select>
+    </select> -->
   
-    <button type="submit">Add Category</button>
+    <button type="submit" (click)="addCategory()">Add Category</button>
   </form>
   
 </section>

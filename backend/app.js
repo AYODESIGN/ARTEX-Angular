@@ -38,6 +38,7 @@ mongoose.connect(DB_URI, {
 
 // Models Importation
 const User = require("./models/user");
+const Category = require("./models/category");
 
 
 
@@ -653,6 +654,24 @@ app.get("/api/users/:id", (req, res) => {
 });
 
 
+//////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////// ADD CATEGORY ////////////////////////////////////////
+app.post("/api/category/add", (req, res) => {
+  console.log("Here into BL : add category" , req.body);
+  let category = new Category(req.body);
+  category.save();
+  res.status(200).json({ message: "Added with success" });
+});
+
+/////////////////////////// GET ALL CATEGORY ////////////////////////////////////////
+app.get("/api/category/get/all", (req, res) => {
+  Category.find().then((doc) => {
+    res.json({ Course: doc });
+    console.log(res)
+  });
+ 
+});
 
 
 module.exports = app;

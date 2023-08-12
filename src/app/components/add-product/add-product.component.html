@@ -1,0 +1,29 @@
+<section id="form-details">
+    <h2 class="text-center margin-top">Add Product</h2>
+<form [formGroup]="productForm">
+     
+    <label><i class=""></i> Select Category:</label>
+<select formControlName="selectedCategory">
+  <option *ngFor="let category of categories" [value]="category._id">{{ category.categoryName }}</option>
+</select>
+
+
+
+    <label for="categoryName">Ref Design</label>
+    <input type="text" id="" formControlName="designRef">
+
+    <label for="categoryName">Ref Color</label>
+    <input type="text" id="" formControlName="colorRef">
+
+
+    <label for="foldType">Availabilty</label>
+    <select class="mb-2" id="" formControlName="available"> 
+      <option value="available">Available</option>
+      <option value="notAvailable">Not Available</option>
+    </select>
+    
+  
+    <button type="submit" (click)="addProduct()">Add Product</button>
+  </form>
+  
+</section>
