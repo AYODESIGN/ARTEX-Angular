@@ -1,0 +1,24 @@
+<section id="product1" class="section-p1">
+   
+    <p>New trending collection</p>
+    <div class="pro-container">
+      <div class="pro" *ngFor="let product of products" (click)="goToProductPage(product.url)">
+        <img style="height: 250px;" [src]="product.img" alt="">
+        <div class="des">
+            <h5 class="roll-in-blurred-left">{{ product.categoryId.categoryName }}</h5>
+          <span>{{ product.categoryId.composition }}</span>
+          <h5>Width: {{ product.categoryId.width }}</h5>
+          <div class="star">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <h4><span class="text-black">REF: </span>{{ product.designRef}} {{ product.colorRef}}</h4>
+        </div>
+        <a href="#"><i class="fal fa-shopping-cart cart "></i></a>
+      </div>
+    </div>
+  </section>
+  

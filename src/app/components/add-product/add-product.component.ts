@@ -16,6 +16,8 @@ export class AddProductComponent implements OnInit {
   id: any;
   title: string = "";
   categories:any
+  categoryId :any
+  selectedCategoryId:any
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,18 +32,19 @@ export class AddProductComponent implements OnInit {
 
 
     this.productForm = this.formBuilder.group({
-      productName: ['', [Validators.required, Validators.minLength(3)]],
       designRef: ['', [Validators.required, Validators.minLength(2)]],
       colorRef: ['', [Validators.required, Validators.minLength(2)]],
       available: ['', [Validators.required, Validators.minLength(3)]],
-      // available: ['',],
+      quantity: ['', [Validators.required]],
+      categoryId: [null],  
+      img: [this.imagePreview],
     });
   }
 
   getCategory(){
     this.productService.getAllCategories().subscribe((response)=>{
       console.log(response)
-      this.categories = response.Course      
+      this.categories = response.category      
 
       console.log(this.categories)
        })}
@@ -49,6 +52,28 @@ export class AddProductComponent implements OnInit {
 
   addProduct(){
     console.log(this.productForm.value)
+    
+    this.productService.addProduct(this.productForm.value, this.productForm.value.img).subscribe();
+    this.productForm.reset(); // Reset form values
+    this.productForm.get('img').setValue(null); // Reset file input
+    swal('Success!', 'Product added!', 'success');
+  
   }
 
+  onCategorySelected() {
+    // Update the categoryId form control's value
+    this.productForm.controls['categoryId'].setValue(this.productForm.value.categoryId);
+  }
+
+  onImageSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.productForm.patchValue({ img: file });
+    this.productForm.updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+      console.log(this.imagePreview);
+    };
+    reader.readAsDataURL(file);
+  }
 }
