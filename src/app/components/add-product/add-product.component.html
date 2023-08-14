@@ -1,29 +1,39 @@
 <section id="form-details">
-    <h2 class="text-center margin-top">Add Product</h2>
-<form [formGroup]="productForm">
-     
+  <h2 class="text-center margin-top">Add Product</h2>
+  <form [formGroup]="productForm">
+
     <label><i class=""></i> Select Category:</label>
-<select formControlName="selectedCategory">
+<select formControlName="categoryId" (change)="onCategorySelected()">
+  <option value="" disabled selected>Select a Category</option>
   <option *ngFor="let category of categories" [value]="category._id">{{ category.categoryName }}</option>
 </select>
-
 
 
     <label for="categoryName">Ref Design</label>
     <input type="text" id="" formControlName="designRef">
 
-    <label for="categoryName">Ref Color</label>
+    <label for="">Ref Color</label>
     <input type="text" id="" formControlName="colorRef">
 
+    <label for="">Quantity</label>
+    <input type="number" id="" formControlName="quantity">
 
-    <label for="foldType">Availabilty</label>
-    <select class="mb-2" id="" formControlName="available"> 
+    <label for="foldType">Availability</label>
+    <select class="mb-2" id="" formControlName="available">
       <option value="available">Available</option>
       <option value="notAvailable">Not Available</option>
     </select>
-    
-  
+
+    <!-- img input -->
+    <div class="form-group">
+      <input type="file" class="form-control" style="visibility: hidden;" #filePicker (change)="onImageSelected($event)">
+    </div>
+    <div class="text-center">
+      <button class="btn btn-primary" (click)="filePicker.click()">Select Product Photo</button>
+    </div>
+    <div class="text-center mb-2">
+      <img [src]="imagePreview" alt="" width="200px">
+    </div>
     <button type="submit" (click)="addProduct()">Add Product</button>
   </form>
-  
 </section>

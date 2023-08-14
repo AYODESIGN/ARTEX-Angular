@@ -39,6 +39,8 @@ mongoose.connect(DB_URI, {
 // Models Importation
 const User = require("./models/user");
 const Category = require("./models/category");
+const Product = require("./models/product");
+
 
 
 
@@ -667,13 +669,42 @@ app.post("/api/category/add", (req, res) => {
 /////////////////////////// GET ALL CATEGORY ////////////////////////////////////////
 app.get("/api/category/get/all", (req, res) => {
   Category.find().then((doc) => {
-    res.json({ Course: doc });
+    res.json({ category: doc });
     console.log(res)
   });
  
 });
 
+/////////////////////////// ADD Product ////////////////////////////////////////
 
+app.post("/api/product/add", multer({ storage: storageConfig }).fields([{ name: "img", maxCount: 1 }]), async (req, res) => {
+  try {
+    console.log("Here into BL: add product", req.body);
+
+    const image = req.files["img"][0];
+
+    req.body.img = `${req.protocol}://${req.get("host")}/myFiles/${image.filename}`;
+
+    const product = new Product(req.body);
+    await product.save();
+    console.log("Success", product); // Changed from 'user' to 'product'
+
+    res.json({ msg: "Added with success" });
+  } catch (error) {
+    console.error("Here Error", error);
+    res.json({ msg: "Error" });
+  }
+});
+
+
+/////////////////////////// GET ALL products ////////////////////////////////////////
+app.get("/api/products/get/all", (req, res) => {
+  Product.find().populate('categoryId').then((doc) => {
+    res.json({ products: doc });
+    console.log(res)
+  });
+ 
+});
 module.exports = app;
 
 

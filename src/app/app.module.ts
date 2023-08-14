@@ -12,6 +12,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AddProductComponent } from './components/add-product/add-product.compon
     SignupComponent,
     LoginComponent,
     AddCategoryComponent,
-    AddProductComponent
+    AddProductComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,

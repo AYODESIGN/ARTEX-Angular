@@ -34,4 +34,20 @@ getAllCategories(){
   return this.http.get<any>( `${this.apiUrl}category/get/all`);
 }
 
+addProduct(product: any, img: File): Observable<any> {
+  const formData: FormData = new FormData();
+  formData.append('categoryId', product.categoryId);
+  formData.append('colorRef', product.colorRef);
+  formData.append('designRef', product.designRef);
+  formData.append('quantity', product.quantity);
+  formData.append('available', product.available);
+  formData.append('img', img);
+
+  return this.http.post<any>(`${this.apiUrl}product/add`, formData);
+}
+
+getAllProducts(){
+  return this.http.get<any>( `${this.apiUrl}products/get/all`);
+}
+
 }
