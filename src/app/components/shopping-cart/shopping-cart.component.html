@@ -1,0 +1,12 @@
+<div class="cart-container">
+    <h2>Your Shopping Cart</h2>
+    <div *ngFor="let cartItem of cartItems" class="cart-item">
+      <div>{{ cartItem.product.name }}</div>
+      <div>Quantity: {{ cartItem.quantity }}</div>
+      <button (click)="removeCartItem(cartItem)">Remove</button>
+    </div>
+    <div class="cart-summary">
+      <h3>Total Quantity: {{ getTotalQuantity() }}</h3>
+    </div>
+  </div>
+  

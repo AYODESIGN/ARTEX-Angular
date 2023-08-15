@@ -1,0 +1,23 @@
+.cart-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+  }
+  
+  .cart-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .cart-summary {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: flex-end;
+  }
+  

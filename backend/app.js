@@ -40,6 +40,8 @@ mongoose.connect(DB_URI, {
 const User = require("./models/user");
 const Category = require("./models/category");
 const Product = require("./models/product");
+const Cart = require("./models/cart");
+
 
 
 
@@ -705,6 +707,45 @@ app.get("/api/products/get/all", (req, res) => {
   });
  
 });
+
+/////////////////////////// CART ////////////////////////////////////////
+app.get('/api/cart', async (req, res) => {
+  try {
+    console.log("here into get all cart items")
+    const cartItems = await Cart.find()
+    .populate('productId')
+    .populate('userId') 
+      .exec(); // Use exec() to execute the query
+    res.json(cartItems);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+app.post('/api/cart/add', async (req, res) => {
+  try {
+    const newCartItem = req.body;
+    const createdCartItem = await Cart.create(newCartItem);
+    res.status(201).json(createdCartItem);
+  } catch (error) {
+    res.status(400).json({ error: 'Bad request' });
+  }
+});
+
+app.delete('/api/cart/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    await Cart.findOneAndDelete({ productId });
+    res.json({ message: 'Item removed from cart' });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+
+
+
 module.exports = app;
 
 
