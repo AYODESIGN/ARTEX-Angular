@@ -736,12 +736,18 @@ app.get('/api/cart/:userId', async (req, res) => {
 app.post('/api/cart/add', async (req, res) => {
   try {
     console.log(req.body.productId)
+    console.log(req.body.userId)
     const newCartItem = req.body;
-    const existingCartItem = await Cart.findOne({ productId: newCartItem.productId });
+    
+    // Check if there's an existing cart item with the same productId and userId
+    const existingCartItem = await Cart.findOne({ 
+      productId: newCartItem.productId,
+      userId: newCartItem.userId
+    });
 
     if (existingCartItem) {
-      console.log("exist")
-      // If the item already exists in the cart, increase the quantity
+      console.log("exist");
+      // If the item already exists in the cart with the same productId and userId, increase the quantity
       existingCartItem.quantity += newCartItem.quantity;
       await existingCartItem.save();
       res.status(200).json(existingCartItem);
@@ -754,6 +760,7 @@ app.post('/api/cart/add', async (req, res) => {
     res.status(400).json({ error: 'Bad request' });
   }
 });
+
 
 app.delete('/api/cart/:productId', async (req, res) => {
   try {
