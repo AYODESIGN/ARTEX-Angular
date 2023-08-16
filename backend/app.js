@@ -22,16 +22,21 @@ const app = express();
 
 const DB_URI = 'mongodb+srv://xetradepot:artex92@cluster0.l7w3zgd.mongodb.net/';
 
-mongoose.connect(DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log('Connected to MongoDB Atlas');
-})
-.catch(err => {
-  console.error('Error connecting to MongoDB Atlas:', err);
-});
+// mongoose.connect(DB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+// .then(() => {
+//   console.log('Connected to MongoDB Atlas');
+// })
+// .catch(err => {
+//   console.error('Error connecting to MongoDB Atlas:', err);
+// });
+
+
+// my local server
+mongoose.connect("mongodb://127.0.0.1:27017/artexDB");
+
 
 
 
@@ -709,23 +714,42 @@ app.get("/api/products/get/all", (req, res) => {
 });
 
 /////////////////////////// CART ////////////////////////////////////////
-app.get('/api/cart', async (req, res) => {
+app.get('/api/cart/:userId', async (req, res) => {
   try {
-    console.log("here into get all cart items")
-    const cartItems = await Cart.find()
-    .populate('productId')
-    .populate('userId') 
-      .exec(); // Use exec() to execute the query
+    console.log("here into get cart items by userId",req.params)
+    const userId = req.params.userId; // Get userId from the query parameter
+    console.log("here into get cart items for userId:", userId);
+
+    // Find cart items with the specified userId
+    const cartItems = await Cart.find({ userId })
+      .populate('productId')
+      .populate('categoryId')
+      .populate('userId')
+      .exec();
+
     res.json(cartItems);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 app.post('/api/cart/add', async (req, res) => {
   try {
+    console.log(req.body.productId)
     const newCartItem = req.body;
-    const createdCartItem = await Cart.create(newCartItem);
-    res.status(201).json(createdCartItem);
+    const existingCartItem = await Cart.findOne({ productId: newCartItem.productId });
+
+    if (existingCartItem) {
+      console.log("exist")
+      // If the item already exists in the cart, increase the quantity
+      existingCartItem.quantity += newCartItem.quantity;
+      await existingCartItem.save();
+      res.status(200).json(existingCartItem);
+    } else {
+      // If the item doesn't exist, create a new cart item
+      const createdCartItem = await Cart.create(newCartItem);
+      res.status(201).json(createdCartItem);
+    }
   } catch (error) {
     res.status(400).json({ error: 'Bad request' });
   }
@@ -733,6 +757,7 @@ app.post('/api/cart/add', async (req, res) => {
 
 app.delete('/api/cart/:productId', async (req, res) => {
   try {
+    console.log("here into deleting item from cart",req.params.productId)
     const productId = req.params.productId;
     await Cart.findOneAndDelete({ productId });
     res.json({ message: 'Item removed from cart' });
@@ -743,7 +768,21 @@ app.delete('/api/cart/:productId', async (req, res) => {
 
 
 
+app.put('/api/update-quantity', (req, res) => {
+  console.log("here into update quantity", req.params)
+  console.log("here into update quantity", req.body.itemId)
+  
+  const itemId = req.body.itemId; // Correct way to extract itemId
+  const newQuantity = req.body.newQuantity; // Correct way to extract newQuantity
 
+  Cart.updateOne({ _id: itemId }, { $set: { quantity: newQuantity } }).then(result => {
+    if (result.nModified === 1) {
+      res.status(200).json({ message: 'Quantity updated successfully' });
+    } 
+  }).catch(error => {
+    res.status(500).json({ message: 'Error updating quantity' });
+  });
+});
 
 
 module.exports = app;

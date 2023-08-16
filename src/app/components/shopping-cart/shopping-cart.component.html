@@ -1,12 +1,30 @@
-<div class="cart-container">
-    <h2>Your Shopping Cart</h2>
-    <div *ngFor="let cartItem of cartItems" class="cart-item">
-      <div>{{ cartItem.product.name }}</div>
-      <div>Quantity: {{ cartItem.quantity }}</div>
-      <button (click)="removeCartItem(cartItem)">Remove</button>
-    </div>
-    <div class="cart-summary">
-      <h3>Total Quantity: {{ getTotalQuantity() }}</h3>
-    </div>
+<div class="container">
+  <table class="table margin-top">
+      <tr>
+          <th>Product Photo</th>
+          <th>Category</th>
+          <th>Product Ref</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+      </tr>
+      <tr *ngFor="let cartItem of cartItems" class="cart-item">
+          <td><img [src]="cartItem.productId.img" width="70px" alt=""></td>
+          <td>{{ cartItem.categoryId.categoryName }}</td>
+          <td>{{ cartItem.productId.designRef }} {{ cartItem.productId.colorRef }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <button class="btn btn-sm btn-secondary mr-2" (click)="decrementQuantity(cartItem)">-</button>
+              {{ cartItem.quantity }}
+              <button class="btn btn-sm btn-secondary ml-2" (click)="incrementQuantity(cartItem)">+</button>
+          </div>
+          </td>
+          <td>
+              <button class="btn btn-sm btn-danger" (click)="removeCartItem(cartItem)">Remove</button>
+          </td>
+      </tr>
+  </table>
+
+  <div class="cart-summary border p-3">
+      <h3 class="text-center">Total Quantity: {{ getTotalQuantity() }}</h3>
   </div>
-  
+</div>

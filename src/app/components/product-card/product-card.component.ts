@@ -43,6 +43,7 @@ export class ProductCardComponent implements OnInit {
     
     const userId = this.decodedToken.userId; // Decode the user ID from the JWT token
     const cartItem = {
+      categoryId: product.categoryId._id,
       productId: product._id,
       userId: userId, // Use the decoded user ID
       quantity: 1 // You can set the initial quantity

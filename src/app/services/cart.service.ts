@@ -12,8 +12,8 @@ export class CartService {
 
   constructor(private http: HttpClient) { }
 
-  getCartItems(): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}cart`);
+  getCartItems(userId): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}cart/${userId}`);
   }
 
   addToCart(cartItem: any): Observable<any> {
@@ -23,4 +23,9 @@ export class CartService {
   removeCartItem(productId: any): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}cart/${productId}`);
   }
-}
+
+  updateQuantity(itemId: string, newQuantity: number): Observable<any> {
+    const updateData = { itemId, newQuantity };
+    return this.http.put<any>(`${this.apiUrl}update-quantity`, updateData);
+  }
+   }

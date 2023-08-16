@@ -9,6 +9,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 // Create cart Schema
 const cartSchema = mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   quantity: Number,
  
