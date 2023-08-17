@@ -33,10 +33,19 @@
       <li *ngIf="isLoggedIn()" ><a (click)="logout()">Logout</a></li>
       <li *ngIf="!isLoggedIn()"><a routerLink="signup/user">Register</a></li>
       
-      <li id="lg-bag">
+      <li  id="lg-bag">
         <a routerLink="shopping-cart">
-          <i class="far fa-shopping-bag"></i>
-          <span class="quantity-badge">{{ getTotalQuantity() }}</span>
+          <i  class="far fa-shopping-bag"></i>
+<!-- Display different content based on totalQuantity -->
+<span class="quantity-badge" *ngIf="totalQuantity !=null; else otherContent">
+  <!-- Content to display when totalQuantity is 0 -->
+  {{ totalQuantity }}
+</span>
+
+<ng-template #otherContent>
+  <!-- Content to display when totalQuantity is not 0 -->
+  <span class="quantity-badge">{{ getTotalQuantity() }}</span>
+</ng-template>
         </a>
       </li>
       

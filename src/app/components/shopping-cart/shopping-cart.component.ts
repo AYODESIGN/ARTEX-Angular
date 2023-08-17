@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
-export class ShoppingCartComponent implements OnInit, OnDestroy {
+export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
   decodedToken: any;
   @Output() cartItemsUpdated = new EventEmitter<any[]>();
@@ -22,18 +22,15 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       this.decodedToken = this.decodeToken(token);
       const userId = this.decodedToken.userId;
       this.fetchCartItems(userId);
+ 
+
+ 
     }
 
-    // Subscribe to the cartItemsUpdated event
-    this.cartItemsSubscription = this.cartService.cartItemsUpdated.subscribe(updatedCartItems => {
-      this.cartItems = updatedCartItems;
-    });
+ 
   }
 
-  ngOnDestroy() {
-    // Unsubscribe from the cartItemsUpdated event
-    this.cartItemsSubscription.unsubscribe();
-  }
+  
 
   fetchCartItems(userId): void {
     this.cartService.getCartItems(userId).subscribe(
@@ -64,14 +61,16 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   incrementQuantity(cartItem) {
     cartItem.quantity++;
     this.updateQuantityInDatabase(cartItem._id, cartItem.quantity);
-    this.refrechHeader()
+    this.updateTotalQuantityInHeader()
+
   }
 
   decrementQuantity(cartItem) {
     if (cartItem.quantity > 1) {
       cartItem.quantity--;
       this.updateQuantityInDatabase(cartItem._id, cartItem.quantity);
-      this.refrechHeader()
+      this.updateTotalQuantityInHeader()
+
     }
   }
 
@@ -81,8 +80,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
         console.log('Quantity updated successfully');
 
         this.fetchCartItems(this.decodedToken.userId);
-        this.cartService.updateCartItems(this.cartItems); // Update the cart items in the service
-        this.refrechHeader()
+        this.updateTotalQuantityInHeader()
       },
       (error) => {
         console.error('Error updating quantity', error);
@@ -94,7 +92,13 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     return jwt_decode(token);
   }
 
-  refrechHeader(){
-    this.cartService.triggerHeaderRefrech()
-  }
+ 
+
+  // shopping-cart.component.ts
+updateTotalQuantityInHeader() {
+  const totalQuantity = this.getTotalQuantity();
+  this.cartService.updateTotalQuantity(totalQuantity); // Update totalQuantity in shared service
+}
+
+
 }

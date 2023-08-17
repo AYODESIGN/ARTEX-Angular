@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user: boolean = false;
   cartItems: any[] = [];
   cartItemsSubscription: Subscription;
-
+  totalQuantity: any = null ;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -26,20 +26,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.isLoggedIn();
-    let token = sessionStorage.getItem("jwt");
-    if (token) {
-      this.decodedToken = this.decodeToken(token);
-      const userId = this.decodedToken.userId;
-      this.fetchCartItems(userId);
-      this.cartService.refrechHeader$.subscribe()
+    
+      this.isLoggedIn();
+      let token = sessionStorage.getItem("jwt");
+      if (token) {
+        this.decodedToken = this.decodeToken(token);
+        const userId = this.decodedToken.userId;
+        
+        // Subscribe to the totalQuantity$ observable first
+        this.cartService.totalQuantity$.subscribe(totalQuantity => {
+          this.totalQuantity = totalQuantity;
+          console.log("Updated total quantity from service: ", totalQuantity);
+        });
+    
+        // Fetch cart items and set the initial value of totalQuantity after subscribing
+        this.fetchCartItems(userId);
+        this.totalQuantity = null; // Set the initial value
+        console.log("Initial total quantity: ", this.totalQuantity);
+      }
     }
-
-    // Subscribe to the cartItemsUpdated event
-    this.cartItemsSubscription = this.cartService.cartItemsUpdated.subscribe(updatedCartItems => {
-      this.cartItems = updatedCartItems;
-    });
-  }
+    
+  
 
   ngOnDestroy() {
     // Unsubscribe from the cartItemsUpdated event
@@ -97,7 +104,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     );
   }
-
   getTotalQuantity(): number {
     return this.cartItems.reduce((totalQuantity, item) => totalQuantity + item.quantity, 0);
   }

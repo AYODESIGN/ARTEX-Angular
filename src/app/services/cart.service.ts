@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable,Subject} from 'rxjs';
+import { Subject, BehaviorSubject,Observable } from 'rxjs';
 
 
 
@@ -9,14 +9,21 @@ import { Observable,Subject} from 'rxjs';
 })
 export class CartService {
 
-  cartItemsUpdated = new EventEmitter<any[]>();
   private cartItems: any[] = []; // Track cart items here
-  private refrechHeaderSubject = new Subject<void>();
-  refrechHeader$ = this.refrechHeaderSubject.asObservable();
+ 
 
   private apiUrl = 'http://localhost:4000/api/';
+  private totalQuantitySubject = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) { }
+
+ 
+  public totalQuantity$ = this.totalQuantitySubject.asObservable();
+
+  // Update the total quantity
+  updateTotalQuantity(totalQuantity: number) {
+    this.totalQuantitySubject.next(totalQuantity);
+  }
 
   getCartItems(userId): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}cart/${userId}`);
@@ -36,12 +43,5 @@ export class CartService {
   }
 
   // Update cart items and emit the event
-  updateCartItems(cartItems: any[]) {
-    this.cartItems = cartItems;
-    this.cartItemsUpdated.emit(this.cartItems);
-  }
 
-  triggerHeaderRefrech(){
-    this.refrechHeaderSubject.next();
-  }
 }

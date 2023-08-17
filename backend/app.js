@@ -20,22 +20,22 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const app = express();
 
-const DB_URI = 'mongodb+srv://xetradepot:artex92@cluster0.l7w3zgd.mongodb.net/';
+// const DB_URI = 'mongodb+srv://xetradepot:artex92@cluster0.l7w3zgd.mongodb.net/';
 
-mongoose.connect(DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log('Connected to MongoDB Atlas');
-})
-.catch(err => {
-  console.error('Error connecting to MongoDB Atlas:', err);
-});
+// mongoose.connect(DB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+// .then(() => {
+//   console.log('Connected to MongoDB Atlas');
+// })
+// .catch(err => {
+//   console.error('Error connecting to MongoDB Atlas:', err);
+// });
 
 
 // my local server
-// mongoose.connect("mongodb://127.0.0.1:27017/artexDB");
+mongoose.connect("mongodb://127.0.0.1:27017/artexDB");
 
 
 
