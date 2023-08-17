@@ -32,7 +32,14 @@
       
       <li *ngIf="isLoggedIn()" ><a (click)="logout()">Logout</a></li>
       <li *ngIf="!isLoggedIn()"><a routerLink="signup/user">Register</a></li>
-      <li id="lg-bag"><a routerLink="shopping-cart"><i class="far fa-shopping-bag"></i></a></li>
+      
+      <li id="lg-bag">
+        <a routerLink="shopping-cart">
+          <i class="far fa-shopping-bag"></i>
+          <span class="quantity-badge">{{ getTotalQuantity() }}</span>
+        </a>
+      </li>
+      
       <li><a href="https://api.whatsapp.com/send?phone=21629586148&text=" class="fa fa-whatsapp" style="font-size:48px;color:green"></a> </li>
       <li><div id="google_translate_element"></div>
 

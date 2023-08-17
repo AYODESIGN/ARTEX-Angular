@@ -2,7 +2,7 @@
    
     <p>New trending collection</p>
     <div class="pro-container">
-      <div class="pro" *ngFor="let product of products" (click)="goToProductPage(product.url)">
+      <div class="pro" *ngFor="let product of products">
         <img class="card-img-top img" [src]="product.img" alt="">
         <div class="des">
             <h5 class="roll-in-blurred-left">{{ product.categoryId.categoryName }}</h5>
