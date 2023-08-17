@@ -15,7 +15,7 @@ import  jwt_decode  from 'jwt-decode';
 export class ProductCardComponent implements OnInit {
   products: any[];
   decodedToken:any;
-
+cartItems:any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,6 +27,13 @@ export class ProductCardComponent implements OnInit {
 
   ngOnInit() {
     this.getProducts();
+    let token = sessionStorage.getItem("jwt")
+    if(token){
+      this.decodedToken = this.decodeToken(token)
+    
+    const userId = this.decodedToken.userId;
+    // this.fetchCartItems(userId);
+  }
   }
 
   getProducts() {
@@ -48,7 +55,7 @@ export class ProductCardComponent implements OnInit {
       userId: userId, // Use the decoded user ID
       quantity: 1 // You can set the initial quantity
     };
-
+console.log("HERE INTO CART",cartItem)
     this.cartService.addToCart(cartItem).subscribe(
       () => {
         swal('Success', 'Item added to cart', 'success');
@@ -60,7 +67,25 @@ export class ProductCardComponent implements OnInit {
     );
   }
   }
+
+  // fetchCartItems(userId): void {
+  //   this.cartService.getCartItems(userId).subscribe(
+  //     (cartItems) => {
+  //       console.log(cartItems)
+  //       this.cartItems = cartItems; // Assign the fetched cart items
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching cart items', error);
+  //     }
+  //   );
+  // }
+
+  // getTotalQuantity(): number {
+  //   return this.cartItems.reduce((totalQuantity, item) => totalQuantity + item.quantity, 0);
+  // }
+
   decodeToken(token:string){
     return jwt_decode(token);
   }
+
 }

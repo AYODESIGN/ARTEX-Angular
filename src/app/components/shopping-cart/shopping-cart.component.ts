@@ -1,32 +1,44 @@
-import { Component, OnInit } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
-import { ProductService } from 'src/app/services/product.service';
-import  jwt_decode  from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
+import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
-export class ShoppingCartComponent implements OnInit {
-  cartItems: any[] = []; // Initialize with an empty array
-  decodedToken:any;
+export class ShoppingCartComponent implements OnInit, OnDestroy {
+  cartItems: any[] = [];
+  decodedToken: any;
+  @Output() cartItemsUpdated = new EventEmitter<any[]>();
+  cartItemsSubscription: Subscription;
+
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    let token = sessionStorage.getItem("jwt")
-    if(token){
-      this.decodedToken = this.decodeToken(token)
-    
-    const userId = this.decodedToken.userId;
-    this.fetchCartItems(userId);
+    let token = sessionStorage.getItem("jwt");
+    if (token) {
+      this.decodedToken = this.decodeToken(token);
+      const userId = this.decodedToken.userId;
+      this.fetchCartItems(userId);
+    }
+
+    // Subscribe to the cartItemsUpdated event
+    this.cartItemsSubscription = this.cartService.cartItemsUpdated.subscribe(updatedCartItems => {
+      this.cartItems = updatedCartItems;
+    });
   }
-}
+
+  ngOnDestroy() {
+    // Unsubscribe from the cartItemsUpdated event
+    this.cartItemsSubscription.unsubscribe();
+  }
 
   fetchCartItems(userId): void {
     this.cartService.getCartItems(userId).subscribe(
       (cartItems) => {
-        console.log(cartItems)
-        this.cartItems = cartItems; // Assign the fetched cart items
+        this.cartItems = cartItems;
       },
       (error) => {
         console.error('Error fetching cart items', error);
@@ -39,10 +51,9 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   removeCartItem(cartItem: any): void {
-    this.cartService.removeCartItem(cartItem.productId._id).subscribe(
+    this.cartService.removeCartItem(cartItem._id).subscribe(
       () => {
-        // Item removed successfully
-        this.fetchCartItems(this.decodedToken.userId); // Refresh the cart items after removal
+        this.fetchCartItems(this.decodedToken.userId);
       },
       (error) => {
         console.error('Error removing item from cart', error);
@@ -53,28 +64,37 @@ export class ShoppingCartComponent implements OnInit {
   incrementQuantity(cartItem) {
     cartItem.quantity++;
     this.updateQuantityInDatabase(cartItem._id, cartItem.quantity);
+    this.refrechHeader()
   }
-  
+
   decrementQuantity(cartItem) {
     if (cartItem.quantity > 1) {
       cartItem.quantity--;
       this.updateQuantityInDatabase(cartItem._id, cartItem.quantity);
+      this.refrechHeader()
     }
   }
 
   updateQuantityInDatabase(itemId, newQuantity) {
     this.cartService.updateQuantity(itemId, newQuantity).subscribe(
-      (response) => {
-        
-        console.log('Quantity updated successfully' );
-        // Optionally, you can update your local cartItems array or perform any other actions
+      () => {
+        console.log('Quantity updated successfully');
+
+        this.fetchCartItems(this.decodedToken.userId);
+        this.cartService.updateCartItems(this.cartItems); // Update the cart items in the service
+        this.refrechHeader()
+      },
+      (error) => {
+        console.error('Error updating quantity', error);
       }
-    
     );
   }
-  
-  decodeToken(token:string){
+
+  decodeToken(token: string) {
     return jwt_decode(token);
   }
 
+  refrechHeader(){
+    this.cartService.triggerHeaderRefrech()
+  }
 }

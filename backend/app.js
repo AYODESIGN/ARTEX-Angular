@@ -22,20 +22,20 @@ const app = express();
 
 const DB_URI = 'mongodb+srv://xetradepot:artex92@cluster0.l7w3zgd.mongodb.net/';
 
-// mongoose.connect(DB_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
-// .then(() => {
-//   console.log('Connected to MongoDB Atlas');
-// })
-// .catch(err => {
-//   console.error('Error connecting to MongoDB Atlas:', err);
-// });
+mongoose.connect(DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log('Connected to MongoDB Atlas');
+})
+.catch(err => {
+  console.error('Error connecting to MongoDB Atlas:', err);
+});
 
 
 // my local server
-mongoose.connect("mongodb://127.0.0.1:27017/artexDB");
+// mongoose.connect("mongodb://127.0.0.1:27017/artexDB");
 
 
 
@@ -738,12 +738,7 @@ app.post('/api/cart/add', async (req, res) => {
     console.log(req.body.productId)
     console.log(req.body.userId)
     const newCartItem = req.body;
-    
-    // Check if there's an existing cart item with the same productId and userId
-    const existingCartItem = await Cart.findOne({ 
-      productId: newCartItem.productId,
-      userId: newCartItem.userId
-    });
+    const existingCartItem = await Cart.findOne({ productId: newCartItem.productId });
 
     if (existingCartItem) {
       console.log("exist");
@@ -762,11 +757,11 @@ app.post('/api/cart/add', async (req, res) => {
 });
 
 
-app.delete('/api/cart/:productId', async (req, res) => {
+app.delete('/api/cart/:categoryId', async (req, res) => {
   try {
-    console.log("here into deleting item from cart",req.params.productId)
-    const productId = req.params.productId;
-    await Cart.findOneAndDelete({ productId });
+    console.log("here into deleting item from cart",req.params.categoryId)
+    const categoryId = req.params.categoryId;
+    await Cart.findOneAndDelete({ _id:categoryId });
     res.json({ message: 'Item removed from cart' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
