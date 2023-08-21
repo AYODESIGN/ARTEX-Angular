@@ -29,8 +29,16 @@ export class CartService {
     return this.http.get<any[]>(`${this.apiUrl}cart/${userId}`);
   }
 
+  getOrderItems(userId): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}orders/${userId}`);
+  }
+
   addToCart(cartItem: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}cart/add`, cartItem);
+  }
+
+  deleteAllCart(userId: any): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}itemsDeleted/${userId}`);
   }
 
   removeCartItem(categoryId: any): Observable<any> {
@@ -42,6 +50,10 @@ export class CartService {
     return this.http.put<any>(`${this.apiUrl}update-quantity`, updateData);
   }
 
-  // Update cart items and emit the event
+  addOrder(order: any): Observable<any> {
+    const url = `${this.apiUrl}order/add`; // Adjust the URL based on your API endpoints
+    return this.http.post(url, order);
+  }
 
+  
 }

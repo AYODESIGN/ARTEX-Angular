@@ -8,6 +8,7 @@ import { AddCategoryComponent } from './components/add-category/add-category.com
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { OrdersComponent } from './components/orders/orders.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,8 @@ const routes: Routes = [
   {path: "add-product", component: AddProductComponent},
   {path: "product-card", component: ProductCardComponent},
   {path: "shopping-cart", component: ShoppingCartComponent},
+  {path: "orders", component: OrdersComponent},
+
   
 ];
 

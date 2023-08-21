@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   cartItems: any[] = [];
   cartItemsSubscription: Subscription;
   totalQuantity: any = null ;
+  qtty: number
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -40,10 +41,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
     
         // Fetch cart items and set the initial value of totalQuantity after subscribing
-        this.fetchCartItems(userId);
+        this.fetchCartItems(userId)
         this.totalQuantity = null; // Set the initial value
         console.log("Initial total quantity: ", this.totalQuantity);
+        
+        console.log(this.qtty)
       }
+
     }
     
   
@@ -59,10 +63,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.decodedToken = this.decodeToken(token);
       if (this.decodedToken.role === 'admin') {
         this.admin = true;
+
       }
       if (this.decodedToken.role === 'user') {
         this.user = true;
+    
+    
       }
+      
       return true;
     }
     return false;
@@ -82,7 +90,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem('jwt');
         this.admin = false;
         this.user = false;
-
+        this.qtty = 0
+        this.totalQuantity = 0 
         // Use SweetAlert to display logout success message
         swal('Logged Out!', 'You have been successfully logged out.', 'success');
         this.router.navigate(['/login']);
@@ -98,6 +107,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.cartService.getCartItems(userId).subscribe(
       (cartItems) => {
         this.cartItems = cartItems;
+        this.qtty = this.cartItems.reduce((totalQuantity, item) => totalQuantity + item.quantity, 0);
+        this.totalQuantity = this.qtty; // Update totalQuantity property
       },
       (error) => {
         console.error('Error fetching cart items', error);

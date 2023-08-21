@@ -46,6 +46,8 @@ const User = require("./models/user");
 const Category = require("./models/category");
 const Product = require("./models/product");
 const Cart = require("./models/cart");
+const Order = require('./models/order');
+
 
 
 
@@ -733,12 +735,29 @@ app.get('/api/cart/:userId', async (req, res) => {
   }
 });
 
+/////////////////////////// orders ////////////////////////////////////////
+app.get('/api/orders/:userId', async (req, res) => {
+  try {
+    console.log("here into get cart items by userId",req.params)
+    const userId = req.params.userId; // Get userId from the query parameter
+    console.log("here into get cart items for userId:", userId);
+
+    // Find cart items with the specified userId
+    const orderItems = await Order.find({ userId })
+  
+
+    res.json(orderItems);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.post('/api/cart/add', async (req, res) => {
   try {
     console.log(req.body.productId)
     console.log(req.body.userId)
     const newCartItem = req.body;
-    const existingCartItem = await Cart.findOne({ productId: newCartItem.productId });
+    const existingCartItem = await Cart.findOne({ productId: newCartItem.productId ,userId: newCartItem.userId } );
 
     if (existingCartItem) {
       console.log("exist");
@@ -755,6 +774,28 @@ app.post('/api/cart/add', async (req, res) => {
     res.status(400).json({ error: 'Bad request' });
   }
 });
+
+/////////////// deleting cart by userID/////////////////
+app.delete('/api/itemsDeleted/:userId', async (req, res) => {
+  try {
+    console.log("here into deleting all cart items from cart", req.params.userId);
+    const userId = req.params.userId;
+    const result = await Cart.deleteMany({ userId: userId });
+    
+    if (result.deletedCount > 0) {
+      console.log("Items deleted successfully.");
+      res.json({ message: 'cart deleted' });
+    } else {
+      console.log("No items found for deletion.");
+      res.json({ message: 'no items to delete' });
+    }
+  } catch (error) {
+    console.error("Error deleting cart:", error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 
 app.delete('/api/cart/:categoryId', async (req, res) => {
@@ -785,6 +826,20 @@ app.put('/api/update-quantity', (req, res) => {
     res.status(500).json({ message: 'Error updating quantity' });
   });
 });
+///////////////////////////////add order//////////////////////
+app.post("/api/order/add", (req, res) => {
+  console.log("Here into BL : add order" , req.body);
+  let order = new Order(req.body);
+  order.save();
+  res.status(200).json({ message: "Added with success" });
+});
+
+
+
+
+
+
+
 
 
 module.exports = app;

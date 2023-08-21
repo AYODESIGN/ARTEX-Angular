@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
@@ -14,7 +15,8 @@ export class ShoppingCartComponent implements OnInit {
   @Output() cartItemsUpdated = new EventEmitter<any[]>();
   cartItemsSubscription: Subscription;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService,
+    ) {}
 
   ngOnInit(): void {
     let token = sessionStorage.getItem("jwt");
@@ -50,10 +52,11 @@ export class ShoppingCartComponent implements OnInit {
   removeCartItem(cartItem: any): void {
     this.cartService.removeCartItem(cartItem._id).subscribe(
       () => {
-        this.fetchCartItems(this.decodedToken.userId);
-      },
-      (error) => {
-        console.error('Error removing item from cart', error);
+        this.fetchCartItems(this.decodedToken.userId); // Fetch updated cart items
+        let quantity = this.getTotalQuantity()
+        let updatedQtty = quantity - cartItem.quantity
+        this.cartService.updateTotalQuantity(updatedQtty)
+        ;
       }
     );
   }
@@ -81,6 +84,7 @@ export class ShoppingCartComponent implements OnInit {
 
         this.fetchCartItems(this.decodedToken.userId);
         this.updateTotalQuantityInHeader()
+
       },
       (error) => {
         console.error('Error updating quantity', error);
@@ -98,7 +102,42 @@ export class ShoppingCartComponent implements OnInit {
 updateTotalQuantityInHeader() {
   const totalQuantity = this.getTotalQuantity();
   this.cartService.updateTotalQuantity(totalQuantity); // Update totalQuantity in shared service
+
+}
+addOrder(){
+  const newOrder = {
+    items: this.cartItems.map(item => ({
+      productId: item.productId._id,
+      categoryId: item.categoryId._id,
+      quantity: item.quantity
+    })),
+    userId: this.decodedToken.userId
+  };
+  
+  // Send the newOrder object to your server to add a new order
+  this.cartService.addOrder(newOrder).subscribe(
+    () => {
+      console.log(newOrder)
+      // Clear the cart items after successful order placement
+      this.cartItems = [];
+      this.cartService.updateTotalQuantity(0); // Update totalQuantity to 0
+      this.removeAllCartItems(this.decodedToken.userId)
+
+    },
+    (error) => {
+      console.error('Error adding order', error);
+    }
+  );
+  }
+  removeAllCartItems(userId){
+  this.cartService.deleteAllCart(userId).subscribe(
+    (response) => {
+      console.log(response)
+      
+ });
+  }
+
+  
 }
 
 
-}

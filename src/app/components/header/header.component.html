@@ -9,8 +9,6 @@
       <li *ngIf="isLoggedIn()" ><a class="text-success"><span class="text-black">Welcome</span> {{decodedToken.Fname}}</a></li>
 
 <li  *ngIf="isLoggedIn() && admin">
-
-  
   <div class="dropdown">
     <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       Admin Dashboard
@@ -19,6 +17,17 @@
       <li><a class="dropdown-item" routerLink="add-category">Add Category</a></li>
       <li><a class="dropdown-item" routerLink="add-product">Add Product</a></li>
       <li><a class="dropdown-item" href="#">Products</a></li>
+      <li><a class="dropdown-item" routerLink="orders">Orders</a></li>
+    </ul>
+  </div>
+</li>
+<li  *ngIf="isLoggedIn() && user">
+  <div class="dropdown">
+    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      User Dashboard
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li><a class="dropdown-item" routerLink="orders">Orders</a></li>
     </ul>
   </div>
 </li>
@@ -36,15 +45,12 @@
       <li  id="lg-bag">
         <a routerLink="shopping-cart">
           <i  class="far fa-shopping-bag"></i>
-<!-- Display different content based on totalQuantity -->
 <span class="quantity-badge" *ngIf="totalQuantity !=null; else otherContent">
-  <!-- Content to display when totalQuantity is 0 -->
   {{ totalQuantity }}
 </span>
 
 <ng-template #otherContent>
-  <!-- Content to display when totalQuantity is not 0 -->
-  <span class="quantity-badge">{{ getTotalQuantity() }}</span>
+  <span class="quantity-badge">{{ qtty }}</span>
 </ng-template>
         </a>
       </li>

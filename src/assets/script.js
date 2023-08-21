@@ -14,26 +14,26 @@ if (close) {
     })
 }
 
-const wrapper = document.querySelector('wrapper')
+// const wrapper = document.querySelector('wrapper')
 
-let pressed = false 
-let startX = 0
+// let pressed = false 
+// let startX = 0
 
-wrapper.addEventListener('mouseleave', function (e) {
-    pressed = true
-    startX = e.clientX
-    this.style.cursor = 'grabbing'
+// wrapper.addEventListener('mouseleave', function (e) {
+//     pressed = true
+//     startX = e.clientX
+//     this.style.cursor = 'grabbing'
 
-})
-wrapper.addEventListener('mouseup', function (e) {
-    pressed = false
+// })
+// wrapper.addEventListener('mouseup', function (e) {
+//     pressed = false
     
-})
+// })
 
-window.addEventListener('mousemove', function (e) {
-  if(!pressed) {
-      return
-  }
-  this.scrollleft = startX - e.clientX
+// window.addEventListener('mousemove', function (e) {
+//   if(!pressed) {
+//       return
+//   }
+//   this.scrollleft = startX - e.clientX
 
-})
+// })
