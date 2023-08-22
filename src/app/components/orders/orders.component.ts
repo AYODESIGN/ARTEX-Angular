@@ -32,10 +32,14 @@ decodedToken:any;
       (orders) => {
         console.log(orders)
         this.orders = orders;
+        console.log(this.orders)
         for (let i = 0; i < this.orders.length; i++) {
            this.order = orders[i];
           this.qtty = this.order.items.reduce((totalQuantity, item) => totalQuantity + item.quantity, 0);
         console.log(this.qtty)
+        this.orders[i].quantity = [];
+        this.orders[i].quantity.push(this.qtty)
+        console.log(this.orders)
         }
         
         this.totalQuantity = this.qtty; // Update totalQuantity property

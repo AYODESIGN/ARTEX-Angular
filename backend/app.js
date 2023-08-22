@@ -744,8 +744,10 @@ app.get('/api/orders/:userId', async (req, res) => {
 
     // Find cart items with the specified userId
     const orderItems = await Order.find({ userId })
-  
-
+    .populate('userId') // Populate userId and select username
+    .populate('items.productId') // Populate productId and select productName
+    .populate('items.categoryId'); // Populate categoryId and select categoryName
+    
     res.json(orderItems);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
